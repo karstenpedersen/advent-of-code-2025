@@ -4,4 +4,5 @@ My solutions for [Advent of Code 2025]( https://adventofcode.com/2025) using [Gl
 
 ## Days
 
-- [Day 1 - Secrey Entrance ⭐](./day1_secret_entrance)
+- [Day 1 - Secret Entrance ⭐](./day1_secret_entrance)
+- [Day 2 - Gift Shop](./day2_gift_shop)
