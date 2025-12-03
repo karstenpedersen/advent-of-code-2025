@@ -7,11 +7,11 @@ pub fn main() -> Nil {
 }
 
 pub fn example_puzzle_input_test() {
-  part1_helper("./inputs/test_input", 3)
+  part1_helper("./inputs/example_puzzle_input", 3)
 }
 
 pub fn puzzle_input_test() {
-  part1_helper("./inputs/input", 995)
+  part1_helper("./inputs/puzzle_input", 995)
 }
 
 fn part1_helper(filepath: String, correct_password: Int) {
