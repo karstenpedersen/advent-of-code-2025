@@ -4,6 +4,8 @@ https://adventofcode.com/2025/day/1
 
 ## Description
 
+### Part 1
+
 The Elves have good news and bad news.
 
 The good news is that they've discovered project management! This has given them the tools they need to prevent their usual Christmas emergency. For example, they now know that the North Pole decorations need to be finished soon so that other critical tasks can start on time.
@@ -68,7 +70,8 @@ Analyze the rotations in your attached document. What's the actual password to o
 Your puzzle answer was 995.
 
 The first half of this puzzle is complete! It provides one gold star: *
---- Part Two ---
+
+### Part 2
 
 You're sure that's the right password, but the door won't open. You knock, but nobody answers. You build a snowman while you think.
 
