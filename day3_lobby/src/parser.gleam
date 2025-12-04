@@ -18,7 +18,7 @@ pub fn parse_input(
       })
       |> result.all
     }
-    Error(_) -> Error(error.ParseError("Failed to read file: " <> filepath))
+    Error(_) -> Error(error.ParseError("Failed to read file " <> filepath))
   }
 }
 

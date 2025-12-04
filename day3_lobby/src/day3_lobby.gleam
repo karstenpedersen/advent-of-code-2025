@@ -1,4 +1,5 @@
 import argv
+import battery
 import error
 import gleam/int
 import gleam/io
@@ -11,14 +12,25 @@ pub fn main() -> Nil {
     [filepath] ->
       case parser.parse_input(filepath) {
         Ok(battery_lines) -> {
-          case solve(battery_lines) {
-            Ok(max_joltage) ->
-              io.println("Max joltage: " <> int.to_string(max_joltage))
-            Error(err) ->
-              io.println(
-                "Failed to find maximum joltage: " <> error.to_string(err),
-              )
-          }
+          [2, 12]
+          |> list.each(fn(n_needed_batteries) {
+            case solve(battery_lines, n_needed_batteries) {
+              Ok(max_joltage) ->
+                io.println(
+                  "Max joltage for "
+                  <> int.to_string(n_needed_batteries)
+                  <> " batteries: "
+                  <> int.to_string(max_joltage),
+                )
+              Error(err) ->
+                io.println(
+                  "Failed to find maximum joltage for "
+                  <> int.to_string(n_needed_batteries)
+                  <> "batteries: "
+                  <> error.to_string(err),
+                )
+            }
+          })
         }
         Error(err) ->
           io.println("Failed to parse input file: " <> error.to_string(err))
@@ -27,38 +39,49 @@ pub fn main() -> Nil {
   }
 }
 
-pub fn solve(battery_banks: List(List(Int))) -> Result(Int, error.CustomError) {
+pub fn solve(
+  battery_banks: List(List(Int)),
+  n_needed_batteries: Int,
+) -> Result(Int, error.CustomError) {
   battery_banks
-  |> list.map(calculate_max_joltage)
+  |> list.map(calculate_max_joltage(_, n_needed_batteries))
   |> result.all
   |> result.map(int.sum)
 }
 
 fn calculate_max_joltage(
   battery_bank: List(Int),
+  n_needed_batteries: Int,
 ) -> Result(Int, error.CustomError) {
-  case battery_bank {
-    [] ->
-      Error(error.IncorrectNumberOfBatteriesError(
-        "No batteries in battery bank",
+  let n_batteries = list.length(battery_bank)
+  case n_batteries >= n_needed_batteries {
+    True -> {
+      let initial_batteries = list.take(battery_bank, n_needed_batteries)
+      let rest_of_batteries = list.drop(battery_bank, n_needed_batteries)
+      let battery_bank = battery.new(initial_batteries)
+      let result = calculate_max_joltage_aux(rest_of_batteries, battery_bank)
+      Ok(result.joltage)
+    }
+    False ->
+      Error(error.InsufficientNumberOfBatteriesError(
+        expected: n_needed_batteries,
+        actual: n_batteries,
       ))
-    [_] ->
-      Error(error.IncorrectNumberOfBatteriesError(
-        "Only one battery available in bank",
-      ))
-    [x, y, ..rest] -> Ok(solve_aux(rest, x, y))
   }
 }
 
-fn solve_aux(battery_bank: List(Int), one: Int, two: Int) -> Int {
-  let joltage = one * 10 + two
-
-  case battery_bank {
-    [] -> joltage
-    [x, ..rest] if one * 10 + x > joltage && one * 10 + x >= two * 10 + x ->
-      solve_aux(rest, one, x)
-    [x, ..rest] if two * 10 + x > joltage && two * 10 + x > one * 10 + x ->
-      solve_aux(rest, two, x)
-    [_, ..rest] -> solve_aux(rest, one, two)
+fn calculate_max_joltage_aux(
+  batteries: List(Int),
+  battery: battery.Battery,
+) -> battery.Battery {
+  case batteries {
+    [] -> battery
+    [x, ..rest] -> {
+      let new_battery =
+        battery
+        |> battery.optimize_battery(x)
+        |> battery.max(battery)
+      battery.max(new_battery, calculate_max_joltage_aux(rest, new_battery))
+    }
   }
 }
