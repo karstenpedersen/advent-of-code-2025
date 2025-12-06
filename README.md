@@ -7,3 +7,4 @@ My solutions for [Advent of Code 2025]( https://adventofcode.com/2025) using [Gl
 - [Day 1 - Secret Entrance ⭐](./day1_secret_entrance)
 - [Day 2 - Gift Shop](./day2_gift_shop)
 - [Day 3 - Lobby ⭐⭐](./day3_lobby)
+- [Day 4 - Printing Deparment ⭐⭐](./day4_printing_department)
