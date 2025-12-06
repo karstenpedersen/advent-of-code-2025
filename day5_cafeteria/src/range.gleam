@@ -32,8 +32,14 @@ pub fn merge(ranges: List(Range)) -> List(Range) {
     let Range(start, end) = range
     case acc {
       [Range(last_start, last_end), ..rest] if last_end + 1 >= start ->
-        list.append([Range(last_start, int.max(last_end, end))], rest)
-      acc -> list.append([range], acc)
+        list.prepend(rest, Range(last_start, int.max(last_end, end)))
+      acc -> list.prepend(acc, range)
     }
   })
+}
+
+/// Check if value is within range
+pub fn is_inside(range: Range, value: Int) -> Bool {
+  let Range(start, end) = range
+  value >= start && value <= end
 }

@@ -1,4 +1,4 @@
-name = "day4_printing_department"
+name = "day5_cafeteria"
 version = "1.0.0"
 
 [dependencies]
